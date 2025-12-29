@@ -1,0 +1,11 @@
+module.exports = {
+  name: 'voice-analytics-dashboard',
+  version: '0.1.0',
+  description: 'Voice Agent Analytics Dashboard',
+  buildCommand: 'npm run build',
+  outputDirectory: 'dist',
+  env: {
+    VITE_SUPABASE_URL: '@supabase_url',
+    VITE_SUPABASE_ANON_KEY: '@supabase_anon_key'
+  }
+};

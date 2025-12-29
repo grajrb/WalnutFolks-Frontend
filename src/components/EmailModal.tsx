@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { supabase, ChartData } from '../lib/supabase';
+import { useState } from 'react';
+import { supabase } from '../lib/supabase';
 import { callSuccessData } from './Charts';
 
 interface EmailModalProps {
