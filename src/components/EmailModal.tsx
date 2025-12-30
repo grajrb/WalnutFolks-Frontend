@@ -28,6 +28,21 @@ export function EmailModal({ isOpen, onClose, onSave }: EmailModalProps) {
     }
 
     try {
+      // Check if Supabase is configured
+      const isSupabaseConfigured = 
+        import.meta.env.VITE_SUPABASE_URL && 
+        import.meta.env.VITE_SUPABASE_URL !== 'https://placeholder.supabase.co';
+
+      if (!isSupabaseConfigured) {
+        // Demo mode - just show the form without database
+        setError('Demo mode: Supabase not configured. Data will not be saved.');
+        setPreviousData(null);
+        setCustomData(callSuccessData);
+        setShowForm(true);
+        setIsLoading(false);
+        return;
+      }
+
       // Check if user has previous data
       const { data: existingData, error: fetchError } = await supabase
         .from('chart_data')
@@ -71,6 +86,22 @@ export function EmailModal({ isOpen, onClose, onSave }: EmailModalProps) {
     setIsLoading(true);
 
     try {
+      // Check if Supabase is configured
+      const isSupabaseConfigured = 
+        import.meta.env.VITE_SUPABASE_URL && 
+        import.meta.env.VITE_SUPABASE_URL !== 'https://placeholder.supabase.co';
+
+      if (!isSupabaseConfigured) {
+        // Demo mode - just update the chart without database
+        onSave(email, customData);
+        setError('Demo mode: Data updated locally (not saved to database)');
+        setTimeout(() => {
+          handleClose();
+        }, 2000);
+        setIsLoading(false);
+        return;
+      }
+
       if (previousData) {
         const { error: updateError } = await supabase
           .from('chart_data')
