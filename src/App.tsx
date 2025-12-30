@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import './App.css';
 import {
   CallSuccessChart,
@@ -19,6 +19,16 @@ function App() {
     setUserEmail(email);
     setChartData(data);
   };
+
+  // Calculate dynamic metrics from chart data
+  const metrics = useMemo(() => {
+    const avgSuccessRate = Math.round(
+      chartData.reduce((sum, entry) => sum + entry.successRate, 0) / chartData.length
+    );
+    return {
+      successRate: avgSuccessRate,
+    };
+  }, [chartData]);
 
   return (
     <div className="min-h-screen bg-gradient-primary text-white">
@@ -50,8 +60,8 @@ function App() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <div className="bg-gray-800 bg-opacity-50 backdrop-blur border border-gray-700 rounded-lg p-6">
             <div className="text-gray-400 text-sm font-medium">Success Rate</div>
-            <div className="text-3xl font-bold text-green-400 mt-2">94%</div>
-            <div className="text-xs text-gray-500 mt-2">↑ 2.3% from yesterday</div>
+            <div className="text-3xl font-bold text-green-400 mt-2">{metrics.successRate}%</div>
+            <div className="text-xs text-gray-500 mt-2">{userEmail ? 'Your custom data' : '↑ 2.3% from yesterday'}</div>
           </div>
           <div className="bg-gray-800 bg-opacity-50 backdrop-blur border border-gray-700 rounded-lg p-6">
             <div className="text-gray-400 text-sm font-medium">Avg Latency</div>

@@ -52,7 +52,14 @@ export function EmailModal({ isOpen, onClose, onSave }: EmailModalProps) {
         .single();
 
       if (fetchError && fetchError.code !== 'PGRST116') {
-        throw fetchError;
+        // If there's an error other than "not found", show warning but allow editing
+        console.error('Supabase error:', fetchError);
+        setError('Warning: Could not connect to database. You can still edit values, but they will not be saved.');
+        setPreviousData(null);
+        setCustomData(callSuccessData);
+        setShowForm(true);
+        setIsLoading(false);
+        return;
       }
 
       if (existingData) {
@@ -65,7 +72,11 @@ export function EmailModal({ isOpen, onClose, onSave }: EmailModalProps) {
 
       setShowForm(true);
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch your data. Please try again.');
+      console.error('Error:', err);
+      setError('Warning: Could not connect to database. You can still edit values, but they will not be saved.');
+      setPreviousData(null);
+      setCustomData(callSuccessData);
+      setShowForm(true);
     } finally {
       setIsLoading(false);
     }
@@ -198,7 +209,10 @@ export function EmailModal({ isOpen, onClose, onSave }: EmailModalProps) {
                   </p>
                   <button
                     type="button"
-                    onClick={() => setCustomData(previousData)}
+                    onClick={() => {
+                      setCustomData([...previousData]);
+                      setError('');
+                    }}
                     className="text-sm text-blue-400 hover:text-blue-300 underline"
                   >
                     Restore previous values
