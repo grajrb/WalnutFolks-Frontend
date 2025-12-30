@@ -1,7 +1,6 @@
 {
   "name": "voice-analytics-dashboard",
   "version": "0.1.0",
-  "description": "Voice Agent Analytics Dashboard",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "env": {
